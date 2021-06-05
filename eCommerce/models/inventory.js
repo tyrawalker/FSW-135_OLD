@@ -1,6 +1,5 @@
 const { ObjectID } = require("bson")
 const mongoose = require("mongoose")
-const { stringify } = require("node:querystring")
 const Schema = mongoose.Schema
 
 //inventory schema

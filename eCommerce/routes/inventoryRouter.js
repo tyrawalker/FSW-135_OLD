@@ -64,3 +64,5 @@ inventoryRouter.put("/:inventoryID", (req, res, next) =>{
         }
 )
 })
+
+module.exports=  inventoryRouter; 
