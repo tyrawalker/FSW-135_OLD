@@ -1,11 +1,10 @@
-const { ObjectID } = require("bson")
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 //inventory schema
 const inventorySchema = new Schema({
-    productId:{
-        type:ObjectID,
+    product_Id:{
+        type:String,
         required:true
     },
     sku:{
