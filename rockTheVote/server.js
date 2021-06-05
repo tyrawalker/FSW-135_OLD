@@ -1,13 +1,18 @@
+//App will not launch becuase of error on ln 27. see notes. was unable to populate new user in postman.
+//required
+require('dotenv').config()
 const express = require ("express")
 const app = express ()
 const morgan = require ("morgan")
 const mongoose = require ("mongoose")
+const expressJwt = require('express-jwt')
+
 
 //middleware 
 app.use(express.json())
 app.use(morgan('dev'))
 
-//connect to db (can we call this db anything we like?)
+//connect to db 
 mongoose.connect('mongodb://localhost:27017/rockthevotedb', {
     useNewUrlParser:true, 
     useUnifiedTopology:true, 
@@ -17,14 +22,19 @@ mongoose.connect('mongodb://localhost:27017/rockthevotedb', {
 ()=> console.log ("connected to DB")
 )
 
-//routes (nodemon is not liking the userRouter)
-app.use("/comment", require("./routes/commentRouter"))
-// app.use("/user", require("./routes/userRouter"))
-app.use("/issue", require("./routes/issueRouter"))
+//routes 
+//ERROR secret should be set at Object.<anonymous> (C:\Users\tyran\Bryan_University\Dev\FSW-135\rockTheVote\server.js:25:17)
+app.use('/api', expressJwt({secret:process.env.SECRET, algorithms:['RS256']}))
+app.use('/auth', require ('./routes/authRouter'))
+app.use("api/comment", require("./routes/commentRouter"))
+app.use("api/issue", require("./routes/issueRouter"))
 
 //error handling
 app.use((err, req, res, next) =>{
     console.log(err)
+    if(err.name === "Unauthorized Error"){
+        res.status(err.status)
+    }
     return res.send({errMsg: err.message})
 })
 

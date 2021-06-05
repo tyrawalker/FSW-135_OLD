@@ -15,7 +15,7 @@ commentRouter.get('/', (req, res, next) => {
 
 //Get One
 commentRouter.get("/:comment_ID", (req, res, next) =>{
-    const comment_ID = req.params.comment_ID
+    const comment_ID = req.params.comment._id
     const foundItem = items.find(item => item._id === comment_ID)
     if(!foundItem){
         const error = new Error(`This item cannot be found.`)
@@ -27,6 +27,7 @@ commentRouter.get("/:comment_ID", (req, res, next) =>{
 
 //Post One
 commentRouter.post('/', (req, res, next)=>{
+    req.body.user = req.user._id
     const newItem = new Item (req.body)
     newItem.save((err, saveItem) =>{
         if(err){
@@ -40,7 +41,7 @@ commentRouter.post('/', (req, res, next)=>{
 
 //Delete One
 commentRouter.delete("/:comment_ID", (req, res, next) => {
-    Comment.findOneAndDelete({_id: req.params.comment_ID}, (err, deleteItem) =>{
+    Comment.findOneAndDelete({_id: req.params.comment._id}, (err, deleteItem) =>{
         if(err){
             res.status(500)
             return next(err)
@@ -52,7 +53,8 @@ commentRouter.delete("/:comment_ID", (req, res, next) => {
 //update one 
 commentRouter.put("/:comment_ID", (req, res, next) =>{
     Comment.findOneAndUpdate(
-        {_id: req.params.comment_ID}, 
+        {_id: req.params.comment._id}, 
+         req.body.user = req.user._id,
          req.body, 
          {new:true}, 
          (err, updatedItem) =>{

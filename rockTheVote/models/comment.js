@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const commentSchema = new Schema({
-    comment_id:{
+    _id:{
         type: String, 
         required: true
     }, 
@@ -10,7 +10,7 @@ const commentSchema = new Schema({
         type:String, 
         required: true
     }, 
-    author:{
+    user:{
         type:Schema.Types.ObjectId, 
         ref:'User', 
         required: true

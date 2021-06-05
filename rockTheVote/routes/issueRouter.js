@@ -15,7 +15,7 @@ issueRouter.get('/', (req, res, next) => {
 
 //Get One
 issueRouter.get("/:issue_ID", (req, res, next) =>{
-    const issue_ID = req.params.issue_ID
+    const issue_ID = req.params.issue._id
     const foundItem = items.find(item => item._id === issue_ID)
     if(!foundItem){
         const error = new Error(`This item cannot be found.`)
@@ -27,6 +27,7 @@ issueRouter.get("/:issue_ID", (req, res, next) =>{
 
 //Post One
 issueRouter.post('/', (req, res, next)=>{
+    req.body.user = req.user._id
     const newItem = new Item (req.body)
     newItem.save((err, saveItem) =>{
         if(err){
@@ -40,7 +41,7 @@ issueRouter.post('/', (req, res, next)=>{
 
 //Delete One
 issueRouter.delete("/:issue_ID", (req, res, next) => {
-    Issue.findOneAndDelete({_id: req.params.issue_ID}, (err, deleteItem) =>{
+    Issue.findOneAndDelete({_id: req.params.issue._id}, (err, deleteItem) =>{
         if(err){
             res.status(500)
             return next(err)
@@ -52,7 +53,8 @@ issueRouter.delete("/:issue_ID", (req, res, next) => {
 //update one 
 issueRouter.put("/:issue_ID", (req, res, next) =>{
     Issue.findOneAndUpdate(
-        {_id: req.params.issue_ID}, 
+        {_id: req.params.issue._id}, 
+         req.body.user = req.user._id,
          req.body, 
          {new:true}, 
          (err, updatedItem) =>{
